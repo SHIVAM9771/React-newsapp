@@ -13,7 +13,7 @@ export default class App extends Component {
         <div>
           <Navbar />
           <Routes>
-            <Route path="/" element={<News />} />
+            <Route path="/" element={<News pageSize={8} />} />
             <Route path="/about" element={<About />} />
           </Routes>
         </div>
