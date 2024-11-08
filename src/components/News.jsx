@@ -67,6 +67,7 @@ export default class News extends Component {
       <>
         <h1 className='text-center' style={{ margin: '35px 0px' }}>NewsHub - Top {this.captalizeFirstLetter(this.props.category)} Headlines</h1>
         {this.state.loading && <Spinner />}
+        {/* Avoid rendering if articles is undefined */}
         <InfiniteScroll
           dataLength={this.state.articles.length}
           next={this.fetchMoreData}
@@ -75,26 +76,27 @@ export default class News extends Component {
         >
           <div className="container">
             <div className="row">
-              {this.state.articles.length === 0 && !this.state.loading && <p>No articles available</p>}
-              {this.state.articles.map((element) => {
-                return (
-                  <div className="col-md-4" key={element.url}>
+              {Array.isArray(this.state.articles) && this.state.articles.length > 0 ? (
+                this.state.articles.map((element) => {
+                  return <div className="col-md-4" key={element.url} >
                     <NewsItem
-                      imageUrl={element.urlToImage ? element.urlToImage : 'https://via.placeholder.com/150'}
+                      imageUrl={element.urlToImage}
                       title={element.title ? element.title.slice(0, 45) : ""}
                       description={element.description ? element.description.slice(0, 88) : ""}
                       newsUrl={element.url}
                       author={element.author}
                       date={element.publishedAt}
-                      source={element.source.name}
-                    />
+                      source={element.source.name} />
                   </div>
-                );
-              })}
+                })
+              ) : (
+                <p>No articles available at the moment.</p>
+              )}
             </div>
           </div>
         </InfiniteScroll>
       </>
-    );
+    )
   }
+
 }
